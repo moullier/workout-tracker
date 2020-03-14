@@ -19,7 +19,7 @@ app.use(express.static("public"));
 require("./routes/html-routes.js")(app);
 require("./routes/api-routes.js")(app);
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouttrackerdb", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workouttrackerdb", { useNewUrlParser: true, useFindAndModify: false  });
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
