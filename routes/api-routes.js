@@ -2,31 +2,43 @@ const db = require("../models");
 
 module.exports = function (app) {
 
-  // Route for getting some data about our workout to be used client side
+  // Route for getting data about all workouts to be used client side
     app.get("/api/workouts", function (req, res) {
-        console.log("Got to api route for workouts");
-        console.log(db.Workout);
         db.Workout.find({}, function (err, data) {
             if (err) return handleError(err);
-            console.log("data is:")
-            console.log(data);
+            // console.log("data is:")
+            // console.log(data);
             return res.json(data)
         });
     });
 
-  // Route for getting all data about the workouts to be used client side
+  // Route for getting all data in last week about the workouts to be used client side
     app.get("/api/workouts/range", function (req, res) {
         console.log("Got to api route for workouts");
         console.log(db.Workout);
-        db.Workout.find({}, function (err, data) {
+
+        //Get today's date using the JavaScript Date object.
+        let ourDate = new Date();
+        
+        //Change it so that it is 7 days in the past.
+        let pastDate = ourDate.getDate() - 7;
+        ourDate.setDate(pastDate);
+        
+        //Log the date to our web console.
+        console.log(ourDate);
+
+
+
+        db.Workout.find({"day": {"$gte": ourDate}}, function (err, data) {
             if (err) return handleError(err);
-            console.log("data is:")
+            console.log("data from only the last week is:")
             console.log(data);
             return res.json(data)
         });
     });
 
 
+    // route to add a new workout to the database
     app.post("/api/workouts", function (req, res) {
         console.log("Got to post api route for workouts");
         // console.log(req.body);
@@ -40,6 +52,8 @@ module.exports = function (app) {
           });
         });
 
+
+    // route to append an exercise to the workout with id given
     app.put("/api/workouts/:id", function (req, res) {
         console.log("It's me, the put request route for id " + req.params.id);
         console.log("req.body = ");

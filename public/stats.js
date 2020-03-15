@@ -34,6 +34,9 @@ API.getWorkoutsInRange()
   return arr;
   }
 function populateChart(data) {
+
+  console.log("data in populateChart: ");
+  console.log(data);
   let durations = duration(data);
   let pounds = calculateTotalWeight(data);
   let workouts = workoutNames(data);
